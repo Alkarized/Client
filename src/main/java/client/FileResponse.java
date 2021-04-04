@@ -22,13 +22,14 @@ public enum FileResponse implements Serializable {
         @Override
         public void getMessageOfResponse() {
             Messages.normalMessageOutput("Уууупс, а в файлик-то ничего записать нельзя, а смысл в чем? Зайкрой и открой нормально", MessageColor.ANSI_RED);
-
+            System.exit(-1);
         }
     },
     DenyAccessNoReadable {
         @Override
         public void getMessageOfResponse() {
             Messages.normalMessageOutput("Ну что-то явно пошло не так, дай права на чтение пощупать.", MessageColor.ANSI_RED);
+            System.exit(-1);
         }
     },
     DenyAccessNoWritableAndNoReadable {
