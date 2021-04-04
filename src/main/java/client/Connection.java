@@ -35,7 +35,7 @@ public class Connection {
         objectInputStream.close();
         return ans;
     }
-
+// у классов можно написать свой метод для сериализации, если наследоваться от Externable
     public void sendSerializableCommand(SerializableCommandStandard serializableCommandStandard) throws IOException {
         ObjectOutputStream objectOutputStream = getObjectOutputStream();
         objectOutputStream.writeObject(serializableCommandStandard);
