@@ -6,6 +6,7 @@ import message.MessageColor;
 import message.Messages;
 import utils.FlatMaker;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -26,12 +27,16 @@ public class UpdateByIdCommand extends Command implements Serializable {
     public void execute(String[] args, Scanner scanner) {
         Flat flat = new FlatMaker().makeFlat(scanner);
         try {
-            if (flat != null && args.length == 2)
-                receiver.updateElementById(scanner, flat, Long.valueOf(args[1]));
-            else
-                throw new Exception();
-        } catch (Exception e) {
+            if (flat != null && args.length == 2) {
+                Long.valueOf(args[1]);
+                receiver.updateElementById(flat, args);
+            } else {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
             Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        } catch (IOException | ClassNotFoundException e1) {
+            Messages.normalMessageOutput( "Что-то пошло не так..." + e1.toString(), MessageColor.ANSI_RED);
         }
 
     }

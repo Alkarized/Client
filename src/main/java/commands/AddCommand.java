@@ -6,12 +6,12 @@ import message.MessageColor;
 import message.Messages;
 import utils.FlatMaker;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
 public class AddCommand extends Command implements Serializable {
     private static final long serialVersionUID = 50;
-
 
     public AddCommand(Receiver receiver) {
         super(receiver);
@@ -25,9 +25,14 @@ public class AddCommand extends Command implements Serializable {
     @Override
     public void execute(String[] args, Scanner scanner) {
         Flat flat = new FlatMaker().makeFlat(scanner);
-        if (flat != null && args.length == 1)
-            receiver.addElement(scanner, flat);
-        else
-            Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        try {
+            if (flat != null && args.length == 1)
+                receiver.addElement(flat);
+            else
+                Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        } catch (IOException | ClassNotFoundException e) {
+            Messages.normalMessageOutput( "Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
+        }
     }
 }
+
