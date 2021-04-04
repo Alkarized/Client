@@ -9,10 +9,12 @@ import commands.*;
 import message.MessageColor;
 import message.Messages;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
@@ -20,18 +22,38 @@ public class ProgramStarter {
 
     private final Invoker invoker;
     private final Receiver receiver;
+    private final Connection connection;
+    private final File file;
 
-    public ProgramStarter(String host, int port) throws IOException {
-        this.invoker = new Invoker();
+    public ProgramStarter(String host, int port, String[] args) throws IOException {
+        invoker = new Invoker();
+        FileReader fileReader = new FileReader();
+        file = new File(fileReader.getFileNameFromArgs(args));
         Messages.normalMessageOutput("Подключаемся к серверу...", MessageColor.ANSI_CYAN);
-        this.receiver = new Receiver(invoker,new Connection(new Socket(InetAddress.getByName(host), port)));
+        connection = new Connection(startConnection(host, port));
+        receiver = new Receiver(invoker, connection);
     }
-
 
     public void start() {
         registerAllCommands();
+        connection.sendFile(file);
+        connection.getFileResponseFromServer().getMessageOfResponse();
         LineReader lineReader = new LineReader();
         lineReader.readLine(new Scanner(System.in), invoker);
+    }
+
+    private Socket startConnection(String host, int port) {
+        Socket socket;
+        try {
+            socket = new Socket(InetAddress.getByName(host), port);
+            System.out.println("Соединение открыто - " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
+            socket.setSoTimeout(1000 * 2);
+            return socket;
+        } catch (IOException e) {
+            Messages.normalMessageOutput("Нет возможности подключиться, попробуем еще раз!", MessageColor.ANSI_RED);
+            return startConnection(host, port);
+        }
+
     }
 
     /*public void addAllFlatsFromCSV() {
@@ -57,7 +79,7 @@ public class ProgramStarter {
 
     }*/
 
-    public void registerAllCommands() {
+    private void registerAllCommands() {
         invoker.registerNewCommand("add", new AddCommand(receiver));
         invoker.registerNewCommand("clear", new ClearCommand(receiver));
         invoker.registerNewCommand("count_less_than_number_of_rooms", new CountLessCommand(receiver));

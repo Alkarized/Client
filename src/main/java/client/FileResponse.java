@@ -38,6 +38,13 @@ public enum FileResponse implements Serializable {
             Messages.normalMessageOutput("Файл нельзя считать и что-то в него записать, давай исправляй, сударь!", MessageColor.ANSI_RED);
             System.exit(-1);
         }
+    },
+
+    NothingAccepted{
+        @Override
+        public void getMessageOfResponse() {
+            System.exit(-1);
+        }
     };
 
     private static final long serialVersionUID = 200;
