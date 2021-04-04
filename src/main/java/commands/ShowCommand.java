@@ -4,6 +4,7 @@ import client.Receiver;
 import message.MessageColor;
 import message.Messages;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -17,10 +18,13 @@ public class ShowCommand extends Command implements Serializable {
 
     @Override
     public void execute(String[] args) {
-        if (args.length == 1)
+        try {if (args.length == 1)
             receiver.printAllElements();
         else
             Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        } catch (IOException | ClassNotFoundException e) {
+            Messages.normalMessageOutput( "Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
+        }
     }
 
     @Override

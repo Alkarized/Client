@@ -6,6 +6,7 @@ import message.MessageColor;
 import message.Messages;
 import utils.FlatMaker;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -25,11 +26,14 @@ public class RemoveLowerCommand extends Command implements Serializable {
     @Override
     public void execute(String[] args, Scanner scanner) {
         Flat flat = new FlatMaker().makeFlat(scanner);
-        if (flat != null && args.length == 1)
-            receiver.removeLowerElements(scanner, flat);
-        else
-            Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        try {
+            if (flat != null && args.length == 1)
+                receiver.removeLowerElements(flat);
+            else
+                Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
+        } catch (IOException | ClassNotFoundException e) {
+            Messages.normalMessageOutput( "Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
+        }
     }
 
 }
-

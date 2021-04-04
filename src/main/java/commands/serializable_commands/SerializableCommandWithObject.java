@@ -6,7 +6,7 @@ import fields.Flat;
 public class SerializableCommandWithObject extends SerializableCommandStandard {
     private static final long serialVersionUID = 101;
 
-    private final Flat flat;
+    private Flat flat;
 
     public SerializableCommandWithObject(Command command, Flat flat) {
         super (command);

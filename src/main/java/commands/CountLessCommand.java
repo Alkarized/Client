@@ -4,6 +4,7 @@ import client.Receiver;
 import message.MessageColor;
 import message.Messages;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Scanner;
 
@@ -18,12 +19,15 @@ public class CountLessCommand extends Command implements Serializable {
     @Override
     public void execute(String[] args) {
         try {
-            if (args.length == 2)
-                receiver.countLessNumberOfRooms(Integer.parseInt(args[1]));
-            else
-                throw new Exception();
-        } catch (Exception e) {
+            if (args.length == 2) {
+                Integer.parseInt(args[1]);
+                receiver.countLessNumberOfRooms(args);
+            } else
+                throw new NumberFormatException();
+        } catch (NumberFormatException e) {
             Messages.normalMessageOutput("Введено неправильное число", MessageColor.ANSI_RED);
+        } catch (IOException | ClassNotFoundException e1) {
+            Messages.normalMessageOutput( "Что-то пошло не так..." + e1.toString(), MessageColor.ANSI_RED);
         }
     }
 
