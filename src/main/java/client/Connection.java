@@ -1,6 +1,6 @@
 package client;
 
-import commands.Command;
+import main.Serial;
 import commands.serializable_commands.SerializableCommandStandard;
 import message.MessageColor;
 import message.Messages;
@@ -11,59 +11,64 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import static client.FileResponse.NothingAccepted;
-
 public class Connection {
     private final Socket socket;
+    private ObjectInputStream objectInputStream;
+    private final ObjectOutputStream objectOutputStream;
 
     public Connection(Socket socket) {
         this.socket = socket;
+        objectOutputStream = getObjectOutputStream();
     }
 
     public Socket getSocket() {
         return socket;
     }
 
-    public ObjectOutputStream getObjectOutputStream() throws IOException {
-        return new ObjectOutputStream(socket.getOutputStream());
+    public ObjectOutputStream getObjectOutputStream() {
+        try {
+            return new ObjectOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public ObjectInputStream getObjectInputStream() throws IOException {
-        return new ObjectInputStream(socket.getInputStream());
+    public void getObjectInputStream(){
+        try {
+            objectInputStream =  new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getStringAnsFromServer() throws IOException, ClassNotFoundException {
-        ObjectInputStream objectInputStream = getObjectInputStream();
         String ans = (String) objectInputStream.readObject();
         objectInputStream.close();
         return ans;
     }
 
-    public FileResponse getFileResponseFromServer(){
-        ObjectInputStream objectInputStream = null;
-        FileResponse fileResponse = FileResponse.NothingAccepted;
+    public Serial getFileResponseFromServer(){
+        getObjectInputStream();
+        //FileResponse fileResponse = FileResponse.NothingAccepted;
+        Serial serial = null;
         try {
-            objectInputStream = getObjectInputStream();
-            fileResponse = (FileResponse) objectInputStream.readObject();
-            objectInputStream.close();
-            return fileResponse;
+            //fileResponse = (FileResponse) objectInputStream.readObject();
+            serial = (Serial) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            Messages.normalMessageOutput("Ошибка получения ответа от сервера о файле, пробуем еще раз", MessageColor.ANSI_RED);
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ignored) {}
-            return getFileResponseFromServer();
+            e.printStackTrace();
+            Messages.normalMessageOutput("Ошибка получения ответа от сервера о файле", MessageColor.ANSI_RED);
         }
 
+        //return fileResponse;
+        return serial;
     }
 
     public void sendFile(File file){
         try {
-            ObjectOutputStream objectOutputStream = getObjectOutputStream();
             objectOutputStream.writeObject(file);
             objectOutputStream.flush();
             Messages.normalMessageOutput("Отправка данных на сервер!", MessageColor.ANSI_CYAN);
-            objectOutputStream.close();
         } catch (IOException e) {
             Messages.normalMessageOutput("Ошибка отправки файла на сервер", MessageColor.ANSI_RED);
         }
@@ -72,7 +77,6 @@ public class Connection {
 
 // у классов можно написать свой метод для сериализации, если наследоваться от Externable
     public void sendSerializableCommand(SerializableCommandStandard serializableCommandStandard) throws IOException {
-        ObjectOutputStream objectOutputStream = getObjectOutputStream();
         objectOutputStream.writeObject(serializableCommandStandard);
         objectOutputStream.flush();
         Messages.normalMessageOutput("Отправка данных на сервер!", MessageColor.ANSI_CYAN);
@@ -90,4 +94,5 @@ public class Connection {
     public void endConnection() throws IOException {
         socket.close();
     }
+
 }
