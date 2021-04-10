@@ -1,19 +1,16 @@
 package client;
 
+import main.FileResponse;
 import main.Serial;
 import commands.serializable_commands.SerializableCommandStandard;
 import message.MessageColor;
 import message.Messages;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Connection {
     private final Socket socket;
-    private ObjectInputStream objectInputStream;
     private final ObjectOutputStream objectOutputStream;
 
     public Connection(Socket socket) {
@@ -34,34 +31,31 @@ public class Connection {
         }
     }
 
-    public void getObjectInputStream(){
-        try {
-            objectInputStream =  new ObjectInputStream(socket.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public ObjectInputStream getObjectInputStream() throws IOException {
+        return new ObjectInputStream(socket.getInputStream());
+
     }
 
     public String getStringAnsFromServer() throws IOException, ClassNotFoundException {
+        ObjectInputStream objectInputStream = getObjectInputStream();;
         String ans = (String) objectInputStream.readObject();
         objectInputStream.close();
         return ans;
     }
 
-    public Serial getFileResponseFromServer(){
-        getObjectInputStream();
-        //FileResponse fileResponse = FileResponse.NothingAccepted;
+    public FileResponse getFileResponseFromServer(){
+        ObjectInputStream objectInputStream = null;
+        FileResponse fileResponse = FileResponse.NothingAccepted;
         Serial serial = null;
         try {
-            //fileResponse = (FileResponse) objectInputStream.readObject();
-            serial = (Serial) objectInputStream.readObject();
+            objectInputStream = getObjectInputStream();
+            fileResponse = (FileResponse) objectInputStream.readObject();
+        } catch (StreamCorruptedException e){
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             Messages.normalMessageOutput("Ошибка получения ответа от сервера о файле", MessageColor.ANSI_RED);
         }
 
-        //return fileResponse;
-        return serial;
+        return fileResponse;
     }
 
     public void sendFile(File file){

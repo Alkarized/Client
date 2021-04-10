@@ -37,8 +37,7 @@ public class ProgramStarter {
     public void start() {
         registerAllCommands();
         connection.sendFile(file);
-        //connection.getFileResponseFromServer().getMessageOfResponse();
-        System.out.println(connection.getFileResponseFromServer());
+        connection.getFileResponseFromServer().getMessageOfResponse();
         LineReader lineReader = new LineReader();
         lineReader.readLine(new Scanner(System.in), invoker);
     }
