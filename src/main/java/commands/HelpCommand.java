@@ -25,6 +25,7 @@ public class HelpCommand extends Command implements Serializable {
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e) {
             Messages.normalMessageOutput("Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
+            e.printStackTrace();
         }
     }
 

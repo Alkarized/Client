@@ -7,7 +7,11 @@ import java.io.Serializable;
 public class SerializableCommandStandard implements Serializable {
     private static final long serialVersionUID = 100;
 
-    private final Command command;
+    public SerializableCommandStandard() {
+
+    }
+
+    private Command command;
 
     public SerializableCommandStandard(Command command) {
         this.command = command;
