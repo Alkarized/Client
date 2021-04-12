@@ -9,10 +9,12 @@ import commands.*;
 import message.MessageColor;
 import message.Messages;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
@@ -20,13 +22,14 @@ public class ProgramStarter {
 
     private final Invoker invoker;
     private final Receiver receiver;
+    private final Connection connection;
 
     public ProgramStarter(String host, int port) throws IOException {
-        this.invoker = new Invoker();
+        invoker = new Invoker();
         Messages.normalMessageOutput("Подключаемся к серверу...", MessageColor.ANSI_CYAN);
-        this.receiver = new Receiver(invoker,new Connection(new Socket(InetAddress.getByName(host), port)));
+        connection = new Connection(startConnection(host, port));
+        receiver = new Receiver(invoker, connection);
     }
-
 
     public void start() {
         registerAllCommands();
@@ -34,30 +37,21 @@ public class ProgramStarter {
         lineReader.readLine(new Scanner(System.in), invoker);
     }
 
-    /*public void addAllFlatsFromCSV() {
-        CSVParser csvParser = new CSVParser();
-        CSVFileReader csvFileReader = new CSVFileReader();
-        ArrayList<String> listOfLines;
-        if ((listOfLines = csvFileReader.readAllLines(collectionManager.getFile())) != null) {
-            for (int i = 0; i < listOfLines.size(); i++) {
-                Flat flat;
-                String[] args = csvParser.parseLineToArray(listOfLines.get(i));
-                if (args != null) {
-                    if ((flat = csvParser.parseArrayToFlat(args)) != null) {
-                        collectionManager.getCollection().add(flat);
-                    } else {
-                        Messages.normalMessageOutput("Программа не смогла считать " + i + " строку, ошибка в формате самих полей, пропускам ее.", MessageColor.ANSI_RED);
-                    }
-                } else {
-                    Messages.normalMessageOutput("Ошибка в строке " + i + ", неправильно составлена CSV таблица, что-то не так с кавычками, пропуск строки", MessageColor.ANSI_RED);
-                }
-            }
-            Messages.normalMessageOutput("Запись данных из файла закончилась", MessageColor.ANSI_GREEN);
+    private Socket startConnection(String host, int port) {
+        Socket socket;
+        try {
+            socket = new Socket(InetAddress.getByName(host), port);
+            System.out.println("Соединение открыто - " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
+            socket.setSoTimeout(1000 * 2);
+            return socket;
+        } catch (IOException e) {
+            Messages.normalMessageOutput("Нет возможности подключиться, попробуем еще раз!", MessageColor.ANSI_RED);
+            return startConnection(host, port);
         }
 
-    }*/
+    }
 
-    public void registerAllCommands() {
+    private void registerAllCommands() {
         invoker.registerNewCommand("add", new AddCommand(receiver));
         invoker.registerNewCommand("clear", new ClearCommand(receiver));
         invoker.registerNewCommand("count_less_than_number_of_rooms", new CountLessCommand(receiver));

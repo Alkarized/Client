@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class ClearCommand extends Command implements Serializable {
     private static final long serialVersionUID = 51;
 
-
     public ClearCommand(Receiver receiver) {
         super(receiver);
     }

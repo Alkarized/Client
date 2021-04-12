@@ -2,10 +2,17 @@ package commands;
 
 import client.Receiver;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public abstract class Command {
-    public Receiver receiver;
+public abstract class Command implements Serializable{
+    private static final long serialVersionUID = 12311;
+
+    public transient Receiver receiver;
+
+    public Command() {
+
+    }
 
     public Command(Receiver receiver) {
         this.receiver = receiver;

@@ -15,7 +15,6 @@ public class LineReader {
             String[] args = line.trim().split(" ");
             if(args.length == 1 && args[0].equals("")){
                 System.out.print("Введите команду: ");
-                continue;
             } else if (args.length != 0){
                 invoker.executeCommand(scanner, args);
                 System.out.print("Введите команду: ");
