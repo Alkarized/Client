@@ -24,14 +24,14 @@ public class AddCommand extends Command implements Serializable {
 
     @Override
     public void execute(String[] args, Scanner scanner) {
-        Flat flat = new FlatMaker().makeFlat(scanner);
         try {
-            if (flat != null && args.length == 1)
+            if (args.length == 1) {
+                Flat flat = new FlatMaker().makeFlat(scanner);
                 receiver.addElement(flat);
-            else
+            } else
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e) {
-            Messages.normalMessageOutput( "Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
+            Messages.normalMessageOutput("Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
         }
     }
 }
