@@ -14,7 +14,7 @@
     </properties>
 
 
-    <dependencies>
+    <!--<dependencies>
         <dependency>
             <groupId>ru.itmo</groupId>
             <artifactId>LibModule</artifactId>
@@ -22,5 +22,5 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/resources/LibModule-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
-    </dependencies>
+    </dependencies>-->
 </project>
