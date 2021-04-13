@@ -24,6 +24,7 @@ public class MinByCoordinatesCommand extends Command implements Serializable {
             else
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             Messages.normalMessageOutput( "Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
         }
     }

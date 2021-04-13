@@ -21,7 +21,9 @@ public class ExitCommand extends Command implements Serializable {
                 receiver.exit();
             else
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -27,6 +27,7 @@ public class CountLessCommand extends Command implements Serializable {
         } catch (NumberFormatException e) {
             Messages.normalMessageOutput("Введено неправильное число", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e1) {
+            e1.printStackTrace();
             Messages.normalMessageOutput( "Что-то пошло не так..." + e1.toString(), MessageColor.ANSI_RED);
         }
     }

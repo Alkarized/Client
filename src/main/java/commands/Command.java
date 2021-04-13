@@ -8,7 +8,7 @@ import java.util.Scanner;
 public abstract class Command implements Serializable{
     private static final long serialVersionUID = 12311;
 
-    public transient Receiver receiver;
+    protected transient Receiver receiver;
 
     public Command() {
 

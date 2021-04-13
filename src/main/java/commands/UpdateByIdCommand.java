@@ -25,17 +25,22 @@ public class UpdateByIdCommand extends Command implements Serializable {
 
     @Override
     public void execute(String[] args, Scanner scanner) {
-        Flat flat = new FlatMaker().makeFlat(scanner);
         try {
-            if (flat != null && args.length == 2) {
-                Long.valueOf(args[1]);
-                receiver.updateElementById(flat, args);
+            if (args.length == 2) {
+                Flat flat = new FlatMaker().makeFlat(scanner);
+                if (flat != null) {
+                    Long.valueOf(args[1]);
+                    receiver.updateElementById(flat, args);
+                } else {
+                    throw new NumberFormatException();
+                }
             } else {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
             Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e1) {
+            e1.printStackTrace();
             Messages.normalMessageOutput( "Что-то пошло не так..." + e1.toString(), MessageColor.ANSI_RED);
         }
 

@@ -34,7 +34,7 @@ public class ProgramStarter {
     public void start() {
         registerAllCommands();
         LineReader lineReader = new LineReader();
-        lineReader.readLine(new Scanner(System.in), invoker);
+        lineReader.readLine(new Scanner(System.in), invoker, true);
     }
 
     private Socket startConnection(String host, int port) {
@@ -45,6 +45,7 @@ public class ProgramStarter {
             socket.setSoTimeout(1000 * 2);
             return socket;
         } catch (IOException e) {
+            e.printStackTrace();
             Messages.normalMessageOutput("Нет возможности подключиться, попробуем еще раз!", MessageColor.ANSI_RED);
             return startConnection(host, port);
         }

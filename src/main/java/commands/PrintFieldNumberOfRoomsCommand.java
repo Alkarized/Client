@@ -19,18 +19,19 @@ public class PrintFieldNumberOfRoomsCommand extends Command implements Serializa
     @Override
     public void execute(String[] args) {
         try {
-            if (args.length == 1)
+            if (args.length == 1) {
                 receiver.printFieldDescendingNumberOfRooms();
-            else
+            } else
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
             Messages.normalMessageOutput("Что-то пошло не так..." + e.toString(), MessageColor.ANSI_RED);
         }
     }
 
     @Override
     public void execute(String[] args, Scanner scanner) {
-
+        execute(args);
     }
 
 }
