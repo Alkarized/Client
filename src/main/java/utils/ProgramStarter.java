@@ -27,7 +27,8 @@ public class ProgramStarter {
     public ProgramStarter(String host, int port) throws IOException {
         invoker = new Invoker();
         Messages.normalMessageOutput("Подключаемся к серверу...", MessageColor.ANSI_CYAN);
-        connection = new Connection(startConnection(host, port));
+        connection = new Connection(host, port);
+        connection.setSocket(connection.startConnection(host, port));
         receiver = new Receiver(invoker, connection);
     }
 
@@ -35,21 +36,6 @@ public class ProgramStarter {
         registerAllCommands();
         LineReader lineReader = new LineReader();
         lineReader.readLine(new Scanner(System.in), invoker, true);
-    }
-
-    private Socket startConnection(String host, int port) {
-        Socket socket;
-        try {
-            socket = new Socket(InetAddress.getByName(host), port);
-            System.out.println("Соединение открыто - " + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
-            socket.setSoTimeout(1000 * 2);
-            return socket;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Messages.normalMessageOutput("Нет возможности подключиться, попробуем еще раз!", MessageColor.ANSI_RED);
-            return startConnection(host, port);
-        }
-
     }
 
     private void registerAllCommands() {
