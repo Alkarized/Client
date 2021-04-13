@@ -34,7 +34,7 @@ public class ProgramStarter {
     public void start() {
         registerAllCommands();
         LineReader lineReader = new LineReader();
-        lineReader.readLine(new Scanner(System.in), invoker);
+        lineReader.readLine(new Scanner(System.in), invoker, true);
     }
 
     private Socket startConnection(String host, int port) {

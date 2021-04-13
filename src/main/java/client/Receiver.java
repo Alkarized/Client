@@ -65,7 +65,7 @@ public class Receiver {
     }
 
     public void countLessNumberOfRooms(String[] args) throws IOException, ClassNotFoundException {
-        connection.sendSerializableCommand(new SerializableCommandWithArgs(new HeadCommand(this), args));
+        connection.sendSerializableCommand(new SerializableCommandWithArgs(new CountLessCommand(this), args));
         SerializableAnswerToClient ans = connection.getStringAnsFromServer();
         Messages.normalMessageOutput(ans.getAns(), ans.getColor());
     }
@@ -89,7 +89,7 @@ public class Receiver {
     }
 
     public void addElement(Flat flat) throws IOException, ClassNotFoundException {
-        connection.sendSerializableCommand(new SerializableCommandWithObject(new ShowCommand(this), flat));
+        connection.sendSerializableCommand(new SerializableCommandWithObject(new AddCommand(this), flat));
         SerializableAnswerToClient ans = connection.getStringAnsFromServer();
         Messages.normalMessageOutput(ans.getAns(), ans.getColor());
     }
@@ -115,7 +115,7 @@ public class Receiver {
             if (!file.exists() || !file.canRead() || !file.canWrite()) {
                 throw new IllegalAccessError();
             }
-            lineReader.readLine(new Scanner(file), invoker);
+            lineReader.readLine(new Scanner(file), invoker, false);
         } catch (IllegalAccessError | FileNotFoundException e) {
             Messages.normalMessageOutput("Невозможно работать с данным файлом, попробуйте еще раз", MessageColor.ANSI_RED);
             return false;

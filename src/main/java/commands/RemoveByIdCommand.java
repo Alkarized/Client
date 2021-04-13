@@ -38,7 +38,7 @@ public class RemoveByIdCommand extends Command implements Serializable {
 
     @Override
     public void execute(String[] args, Scanner scanner) {
-
+        execute(args);
     }
 
 }

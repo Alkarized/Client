@@ -25,11 +25,15 @@ public class UpdateByIdCommand extends Command implements Serializable {
 
     @Override
     public void execute(String[] args, Scanner scanner) {
-        Flat flat = new FlatMaker().makeFlat(scanner);
         try {
-            if (flat != null && args.length == 2) {
-                Long.valueOf(args[1]);
-                receiver.updateElementById(flat, args);
+            if (args.length == 2) {
+                Flat flat = new FlatMaker().makeFlat(scanner);
+                if (flat != null) {
+                    Long.valueOf(args[1]);
+                    receiver.updateElementById(flat, args);
+                } else {
+                    throw new NumberFormatException();
+                }
             } else {
                 throw new NumberFormatException();
             }
