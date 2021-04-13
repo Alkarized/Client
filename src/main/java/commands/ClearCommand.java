@@ -26,6 +26,7 @@ public class ClearCommand extends Command implements Serializable {
             else
                 Messages.normalMessageOutput("Неправильно введены аргументы", MessageColor.ANSI_RED);
         } catch (IOException | ClassNotFoundException e1) {
+            e1.printStackTrace();
             Messages.normalMessageOutput( "Что-то пошло не так..." + e1.toString(), MessageColor.ANSI_RED);
         }
     }

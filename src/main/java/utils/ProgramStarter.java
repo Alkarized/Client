@@ -45,6 +45,7 @@ public class ProgramStarter {
             socket.setSoTimeout(1000 * 2);
             return socket;
         } catch (IOException e) {
+            e.printStackTrace();
             Messages.normalMessageOutput("Нет возможности подключиться, попробуем еще раз!", MessageColor.ANSI_RED);
             return startConnection(host, port);
         }
